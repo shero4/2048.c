@@ -3,12 +3,13 @@
 #include <time.h>
 
 int score = 0;
+int N = 3;
 
-int displayBoard(int board[5][5])
+int displayBoard(int board[N][N])
 {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < N; i++)
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < N; j++)
         {
             printf("%d  ", board[i][j]);
         }
@@ -17,16 +18,16 @@ int displayBoard(int board[5][5])
     return 1;
 }
 
-int placeNumber(int board[5][5])
+int placeNumber(int board[N][N])
 {
 
     //find valid candidates
 
-    int validCan[25][2] = {0};
+    int validCan[50][2] = {0};
     int k = 0;
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < N; i++)
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < N; j++)
         {
             if (board[i][j] == 0)
             {
@@ -50,9 +51,9 @@ int placeNumber(int board[5][5])
     return 1;
 }
 
-void rotateBoard(int board[5][5])
+void rotateBoard(int board[N][N])
 { // rotate board clockwise
-    int n = 5;
+    int n = N;
     for (int i = 0; i < n; i++)
     { // first we transpose the matrix
         for (int j = i; j < n; j++)
@@ -74,9 +75,9 @@ void rotateBoard(int board[5][5])
     }
 }
 
-void slideOneRowLeft(int row[5])
+void slideOneRowLeft(int row[N])
 {
-    int n = 5;
+    int n = N;
     for (int k = 0; k < n - 1; k++) // loop n-1 times to shift all elements to left
     {
         for (int i = (n - 1); i > 0; i--) // shift elements to left
@@ -112,15 +113,51 @@ void slideOneRowLeft(int row[5])
     }
 }
 
-void slideAllRowsLeft(int board[5][5])
+void slideAllRowsLeft(int board[N][N])
 {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < N; i++)
     {
         slideOneRowLeft(board[i]);
     }
 }
 
-int goUp(int board[5][5])
+int hasLost(int board[N][N])
+{
+    int n = N;
+    int spaceAvail = 0;
+    for (int i = 1; i < n - 1; i++)
+    {
+        for (int j = 1; j < n - 1; j++)
+        {
+            if (board[i][j] == board[i][j + 1])
+            {
+                spaceAvail = 1;
+            }
+            if (board[i][j] == board[i][j - 1])
+            {
+                spaceAvail = 1;
+            }
+            if (board[i][j] == board[i + 1][j])
+            {
+                spaceAvail = 1;
+            }
+            if (board[i][j] == board[i-1][j])
+            {
+                spaceAvail = 1;
+            }
+        }
+    }
+    if (spaceAvail == 1) // space is availible 
+    {
+        return 0; // player has not lost yet
+    }
+    else // space is not availible
+    {
+        return 1; //player has lost
+    }
+}
+
+int goUp(int board[N][N])
 {
     rotateBoard(board);
     rotateBoard(board);
@@ -130,7 +167,7 @@ int goUp(int board[5][5])
     placeNumber(board);
     return 1;
 }
-int goDown(int board[5][5])
+int goDown(int board[N][N])
 {
     rotateBoard(board);
     slideAllRowsLeft(board);
@@ -140,13 +177,13 @@ int goDown(int board[5][5])
     placeNumber(board);
     return 1;
 }
-int goLeft(int board[5][5])
+int goLeft(int board[N][N])
 {
     slideAllRowsLeft(board);
     placeNumber(board);
     return 1;
 }
-int goRight(int board[5][5])
+int goRight(int board[N][N])
 {
     rotateBoard(board);
     rotateBoard(board);
@@ -161,13 +198,7 @@ int main()
 {
     srand(time(0));
 
-    int board[5][5] = {
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-    };
+    int board[3][3] = {0};
 
     //init
     placeNumber(board);
@@ -182,8 +213,8 @@ int main()
         printf("Score: %d\n", score);
         printf("Enter your choice:");
         scanf("%d", &c);
-        printf("asdadasdasdas\n");
         int ex = 0;
+        // int lost = hasLost(board);
         switch (c)
         {
         case 1: //go right
@@ -207,6 +238,10 @@ int main()
             printf("\nEnd.");
             break;
         }
+        // if(lost == 1) {
+        //     printf("\n You Lost.");
+        //     break;
+        // }
     }
     return 0;
 }
