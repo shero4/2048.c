@@ -172,7 +172,7 @@ int main()
     //init
     placeNumber(board);
     placeNumber(board);
-    char c;
+    int c;
 
     //actual game starts
     while (1)
@@ -181,20 +181,21 @@ int main()
         displayBoard(board);
         printf("Score: %d\n", score);
         printf("Enter your choice:");
-        scanf("%c", &c);
+        scanf("%d", &c);
+        printf("asdadasdasdas\n");
         int ex = 0;
         switch (c)
         {
-        case 'd': //go right
+        case 1: //go right
             goRight(board);
             break;
-        case 'a': //go left
+        case 2: //go left
             goLeft(board);
             break;
-        case 'w': //go up
+        case 3: //go up
             goUp(board);
             break;
-        case 's': //go down
+        case 4: //go down
             goDown(board);
             break;
         default:
